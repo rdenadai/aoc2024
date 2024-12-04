@@ -25,19 +25,26 @@ def is_decreasing(reports):
     return all(report < reports[idx + 1] for idx, report in enumerate(reports) if idx < len(reports) - 1)
 
 
+def is_safe(reports):
+    return compute_diff(reports) and (is_increasing(reports) or is_decreasing(reports))
+
+
 def compute_part_1(input_: str) -> int:
-    safe = []
+    return sum(is_safe(array("i", map(int, line.split()))) for line in input_.splitlines())
+
+
+def compute_part_2(input_: str) -> int:
+    amout_of_safe = 0
     for line in input_.splitlines():
-        reports = array("i", list(map(int, line.split())))
-        safe.append(compute_diff(reports) and (is_increasing(reports) or is_decreasing(reports)))
-    return sum(safe)
-
-
-def compute_part_2(s: str) -> int:
-    if not s or not isinstance(s, str):
-        return 0
-    # Calculate response
-    return 0
+        reports = array("i", map(int, line.split()))
+        if is_safe(reports):
+            amout_of_safe += 1
+        else:
+            for idx in range(0, len(reports)):
+                if is_safe(reports[:idx] + reports[idx + 1 :]):
+                    amout_of_safe += 1
+                    break
+    return amout_of_safe
 
 
 if __name__ == "__main__":  # pragma: no cover
