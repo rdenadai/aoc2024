@@ -23,7 +23,7 @@ $> uv init
 Run tests:
 
 ```bash
-$> pytest -s --cov=app --cov-report term-missing tests/
+$> uv run pytest -s --cov=app --cov-report term-missing tests/
 ```
 
 Run single day, to get the results:
