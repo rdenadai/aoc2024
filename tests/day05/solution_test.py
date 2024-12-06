@@ -52,7 +52,7 @@ def test_part_1(input_, expected):
     [
         (
             INPUT_TEXT,
-            0,
+            123,
         ),
     ],
 )

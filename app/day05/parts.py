@@ -30,6 +30,25 @@ def parsing(input_: str) -> tuple[defaultdict[int, list[int]], tuple[tuple[int, 
     return page_ordering_rules_dict, updates_parsed
 
 
+def naive_bubble_sort(lst: list, page_ordering_rules_dict: defaultdict[int, list[int]]) -> list:
+    n = len(lst) - 1
+    if n <= 0:
+        return lst
+
+    i, is_sorted = 0, True
+    while True:
+        if i >= n:
+            if is_sorted:
+                break
+            i, is_sorted = 0, True
+
+        if lst[i + 1] not in page_ordering_rules_dict.get(lst[i], []):
+            lst[i], lst[i + 1] = lst[i + 1], lst[i]
+            is_sorted = False
+        i += 1
+    return lst
+
+
 @timing
 def compute_part_1(input_: str) -> int:
     page_ordering_rules_dict, updates_parsed = parsing(input_)
@@ -51,7 +70,12 @@ def compute_part_2(input_: str) -> int:
         if not all(n in page_ordering_rules_dict[item] for n in updates[idx + 1 :])
     }
 
-    return 0
+    return sum(
+        map(
+            lambda updates: updates[(len(updates) - 1) // 2],
+            (naive_bubble_sort(list(updates), page_ordering_rules_dict) for updates in incorrectly_ordered_updates),
+        )
+    )
 
 
 if __name__ == "__main__":  # pragma: no cover
